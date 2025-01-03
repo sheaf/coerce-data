@@ -1,0 +1,39 @@
+name: CI
+
+# Trigger the workflow on push or pull request, but only for the master branch
+on:
+  pull_request:
+  push:
+    branches: [master]
+
+jobs:
+  cabal:
+    name: ghc ${{ matrix.ghc }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        ghc:
+          - "latest"
+          - "9.10.1"
+          - "9.8.2"
+          - "9.6.2"
+          - "9.4.7"
+          - "9.2.5"
+          - "9.0.2"
+
+    steps:
+    - name: Checkout commit
+      uses: actions/checkout@v3
+      if: github.event.action == 'opened' || github.event.action == 'synchronize' || github.event.ref == 'refs/heads/master'
+
+    - name: Set up GHC & cabal
+      uses: haskell/actions/setup@v2
+      with:
+        ghc-version: ${{ matrix.ghc }}
+        cabal-version: "latest"
+
+    - name: Build
+      run: cabal build
+
+    - name: Test
+      run: cabal test

@@ -1,0 +1,96 @@
+cabal-version:  3.0
+name:           coerce-data
+version:        0.1.0.0
+synopsis:       Coerce between data types
+license:        BSD-3-Clause
+build-type:     Simple
+author:         Sam Derbyshire
+maintainer:     Sam Derbyshire
+copyright:      2025 Sam Derbyshire
+homepage:       https://github.com/sheaf/coerce-data
+category:       Type System, Plugin
+description:
+
+  'coerce-data' is a type-checking plugin that allows safe zero-cost coercions
+  between data-types.
+
+  Usage example:
+
+  @
+
+  {-# OPTIONS_GHC -fplugin=CoerceData.Plugin #-}
+
+  module M where
+
+    data D1 = MkD1 Int !Bool
+    data D2 a = MkD2 a !Bool
+
+    oneTwo :: [D1] -> [D2 Int]
+    oneTwo = coerce
+  @
+
+  The plugin will solve the @Coercible D1 (D2 Int)@ constraint that arises from
+  this code, allowing GHC to typecheck it.
+
+extra-source-files:
+  changelog.md
+
+common common
+
+  build-depends:
+    base
+      >= 4.15.0 && < 4.22,
+    ghc
+      >= 9.0    && < 9.14,
+
+  default-language:
+    Haskell2010
+
+  ghc-options:
+    -Wall
+    -Wcompat
+    -fwarn-missing-local-signatures
+    -fwarn-incomplete-uni-patterns
+    -fwarn-missing-deriving-strategies
+    -fno-warn-unticked-promoted-constructors
+
+library
+
+  import:
+    common
+
+  hs-source-dirs:
+    src
+
+  build-depends:
+    ghc-tcplugin-api
+      >= 0.13 && < 0.15,
+    transformers
+      >= 0.6  && < 0.7
+
+  exposed-modules:
+    CoerceData.Plugin
+
+  default-language:
+    Haskell2010
+
+test-suite coerce-data-test
+
+  import:
+    common
+
+  type:
+    exitcode-stdio-1.0
+
+  build-depends:
+    coerce-data
+
+  hs-source-dirs:
+    test
+
+  main-is:
+    Main.hs
+
+  other-modules:
+    Framework
+    Tests
