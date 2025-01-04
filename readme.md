@@ -1,3 +1,10 @@
+
+# coerce-data
+
+🚧 WORK IN PROGRESS 🚧
+
+<!--
+
 # coerce-data <a href="https://hackage.haskell.org/package/coerce-data" alt="Hackage"><img src="https://img.shields.io/hackage/v/coerce-data.svg" /></a>
 
 What if you could extend Haskell's iconic `coerce` function to work on data
@@ -103,3 +110,5 @@ peekAndPoke = coerce
 If `FancyType` changes, this code won't compile until you update it,
 ensuring it's easily maintainable: it doesn't make any unchecked assumptions
 about the original type, unlike using `unsafeCoerce`.
+
+-->
